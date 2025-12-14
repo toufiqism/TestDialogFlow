@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "testagenta-lmwm",
+  "private_key_id": "01eb712035cedef4bd332e6e5dc7d3a7530815c8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDVHVHwr2DENUiD\nuETX4KWnbLbL2N816SIqR10nhzfVttYbo8+QjdhYRXevYN5Ju+hEc6EBzvYxW2sV\nrrTGDC+G2Y7GsP6Fct6c6GbtSFwCEQO1vcwLbYW3a7vPa7rVDvH5IoAq3x3nm4GN\ngAZeuGX52MiG3hvY7McMdPAjKKwpO5SQO6tczhpeWPhPVaTEMR6JPSZtAQAPWWyC\nxo+S3qf3Qt5DJpZQtLNG0eJL6cMQABSaQtBuIudqCdMdLhxw13Lf6ZwfRDKjNeam\namnL/cwiJG8GUK76fXDZAmDrcyCz7r1rw/Cgoj/jIqcWASc65V0yha9gQWfu5zbo\nqQ2PlcLFAgMBAAECggEADuUcN4LCdCQ3O8GSyjXQzilag1fWjfmL4kGXoK4iOGUt\nhMQHu1Y2o0DDszXFg4jHHJWqUKqK6Xs2uk66IsdyQO4OvRNczq3vIi9aFkaC68AN\nrtOjob7XZDD68O3aIo8HWX7QT27Fs8zaGq4yg8dGlVZR+Z8nehtedB/uMr7ifYUk\nXQqrRagD5qPGnoOeb2UCBKAejyYgbTdK83g1XTKqErvVf3nRCbpLHGXv7CbYxZOi\nQsSAqILO8vt17q9JhO0RTSiCoCAXyhGKLDc2O+JMW0MCkXHECvv5FYu2Ho36mlcV\nFPI7V8UpsTIVotPsgGnqeesWkU6ni72HsI5CwDYrBwKBgQDv5MliLmH7j202fFvg\nNr0iwTpdbyq9sWAZZO+fuZkhpkoSFsxn7XVP+s1mESLW2UulP5Mg4tVr2xYNpCJZ\n+Hqe1Df28E5EJqZolZVA3qznDAdgUyqXV3A/NFfYyg/LjhPDo4ziPO/iQuyR+7D6\nLhT1K9vMjsuoytJu8lBysUAy4wKBgQDjbEMR6rJXf8Wne/FqSnkhVNDWgHB7IZn3\n8mB9QNxFNhEDNOnmNFaQG/poRbA1Q9gSx4sjbe9PzxcKy43NW0uhM7FvDBoDRK5U\nagKZu9ozcIWGDbLLOPkgO5P/zVNInGLDO5SgV/zXDYPOPYUcy5/C0767wfA1NmiX\nOOKFqP4cNwKBgAfq4iamZz95PV6F/jZJODbUb8uzppJ6LzTHWw1Hf+FXbqxoKjjn\n4m5QVcUfnam/pDqA/achNXAI3BJ5L1UO2WUyleJFjh+7stRS04k/kC9T+05XkFlM\nXn0HijqyeJD8UHStijHRVw19rfcnenDXYoOw/eEjeV9JymY1Ayi15uuHAoGAG82E\ndZBHtUK9mzgfz2rDXDvOPCr/lU4KULGk8isXwq5Vbhrt7WLAomWJO24pmJlutP0I\nGZC7DPq4Sm2QLGbY3CBBtN254GRpG5DKOJkql9dNu5G5JfcVHceq1D75y4qy2ENU\nbDXVh0TztCb5Owf5xAu26aVQBHFeX/5oUwbR6gkCgYBbNhUjgFMZqcpK1M5OocBS\nkXM7xNpRtRC8NBnIX7abE9Xd99b6Yfqqjpe70uTHfJanq94DA4ihqVYh4SyhhLoG\nQ9vzJlJ2/Mnvz5oCf3AEDB7mGbxS0kqOIfNvRi+NgMdO3iRQsoZU59CIJL8UkYPo\nMsowsILaBLHqTVh6fsh5iw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "chat-client@testagenta-lmwm.iam.gserviceaccount.com",
+  "client_id": "113929914901846096206",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chat-client%40testagenta-lmwm.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
