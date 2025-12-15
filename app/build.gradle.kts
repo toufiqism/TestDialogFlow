@@ -87,4 +87,8 @@ dependencies {
 
     // Google Auth Library for service account authentication
     implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
+
+    //more icons
+    implementation (libs.androidx.material.icons.extended)
+
 }
