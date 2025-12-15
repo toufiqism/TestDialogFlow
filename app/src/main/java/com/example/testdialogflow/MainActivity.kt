@@ -1,14 +1,14 @@
 package com.example.testdialogflow
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,11 +29,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.outlined.Contrast
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -54,9 +59,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
@@ -82,14 +87,29 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Let the app handle insets manually for better keyboard control
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        
         enableEdgeToEdge()
+        
         setContent {
-            TestDialogFlowTheme {
-                ChatApp(viewModel = viewModel)
+            val context = LocalContext.current
+            val themePreferences = remember { ThemePreferences(context) }
+            val themeMode by themePreferences.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
+            val scope = rememberCoroutineScope()
+            
+            val isDarkTheme = when (themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+            
+            TestDialogFlowTheme(darkTheme = isDarkTheme) {
+                ChatApp(
+                    viewModel = viewModel,
+                    currentThemeMode = themeMode,
+                    onThemeModeChange = { mode ->
+                        scope.launch { themePreferences.setThemeMode(mode) }
+                    }
+                )
             }
         }
     }
@@ -97,7 +117,13 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatApp(viewModel: ChatViewModel) {
+fun ChatApp(
+    viewModel: ChatViewModel,
+    currentThemeMode: ThemeMode = ThemeMode.SYSTEM,
+    onThemeModeChange: (ThemeMode) -> Unit = {}
+) {
+    var showThemeMenu by remember { mutableStateOf(false) }
+    
     Scaffold(
         topBar = {
             TopAppBar(
@@ -106,6 +132,55 @@ fun ChatApp(viewModel: ChatViewModel) {
                         "Chat Assistant",
                         style = MaterialTheme.typography.titleLarge
                     )
+                },
+                actions = {
+                    IconButton(onClick = { showThemeMenu = true }) {
+                        Icon(
+                            imageVector = when (currentThemeMode) {
+                                ThemeMode.LIGHT -> Icons.Filled.LightMode
+                                ThemeMode.DARK -> Icons.Filled.DarkMode
+                                ThemeMode.SYSTEM -> Icons.Outlined.Contrast
+                            },
+                            contentDescription = "Theme",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    
+                    DropdownMenu(
+                        expanded = showThemeMenu,
+                        onDismissRequest = { showThemeMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("System default") },
+                            onClick = {
+                                onThemeModeChange(ThemeMode.SYSTEM)
+                                showThemeMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Outlined.Contrast, contentDescription = null)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Light") },
+                            onClick = {
+                                onThemeModeChange(ThemeMode.LIGHT)
+                                showThemeMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Filled.LightMode, contentDescription = null)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Dark") },
+                            onClick = {
+                                onThemeModeChange(ThemeMode.DARK)
+                                showThemeMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Filled.DarkMode, contentDescription = null)
+                            }
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -127,11 +202,8 @@ fun ChatScreen(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-    
-    // Track keyboard visibility
     val imeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
-    // Auto-scroll to bottom when new messages arrive or keyboard opens
     LaunchedEffect(uiState.messages.size, imeVisible) {
         if (uiState.messages.isNotEmpty()) {
             scope.launch {
@@ -143,11 +215,10 @@ fun ChatScreen(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .imePadding() // Handle keyboard padding here
+            .imePadding()
             .navigationBarsPadding()
             .animateContentSize()
     ) {
-        // Chat History - takes remaining space
         LazyColumn(
             state = listState,
             modifier = Modifier
@@ -158,15 +229,12 @@ fun ChatScreen(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
             reverseLayout = false
         ) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
-            
             items(uiState.messages) { message ->
                 ChatBubble(message)
             }
-            
             item { Spacer(modifier = Modifier.height(8.dp)) }
         }
 
-        // Input Area - stays at bottom, keyboard pushes it up
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.surface,
@@ -272,5 +340,20 @@ fun MessageInput(
                 contentDescription = "Send"
             )
         }
+    }
+}
+
+@SuppressLint("ViewModelConstructorInComposable")
+@Preview(showBackground = true)
+@Composable
+fun ChatAppPreview() {
+    class FakeChatRepository : ChatRepository {
+        override suspend fun sendMessage(text: String, sessionId: String): Result<String> {
+            return Result.success("This is a response from the bot.")
+        }
+    }
+    val fakeViewModel = ChatViewModel(FakeChatRepository())
+    TestDialogFlowTheme {
+        ChatApp(viewModel = fakeViewModel)
     }
 }
