@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -72,27 +73,33 @@ dependencies {
 
     // --- Networking (The Data Layer) ---
     // Retrofit: Type-safe HTTP client
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
     // GSON Converter: For serializing JSON to Data Classes
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.converter.gson)
     // OkHttp Logging Interceptor: Crucial for debugging network calls
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation(libs.logging.interceptor)
 
     // ViewModel integration with Compose
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
 
     // --- Concurrency (The Execution Model) ---
     // Coroutines for async operations
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
 
     // Google Auth Library for service account authentication
-    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
+    implementation(libs.google.auth.library.oauth2.http)
 
     //more icons
     implementation (libs.androidx.material.icons.extended)
 
     // DataStore for preferences
-    implementation("androidx.datastore:datastore-preferences:1.2.0")
+    implementation(libs.androidx.datastore.preferences)
 
-
+    // Navigation 3
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:2.10.0")
+    
+    // Kotlin Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 }
